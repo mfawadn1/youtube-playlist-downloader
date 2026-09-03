@@ -10,8 +10,11 @@ env/
 venv/
 ENV/
 
-# Output downloads
+# Output downloads & temp parts
 *.mp4
 *.mkv
 *.webm
 *.mp3
+*.part
+*.part-*
+*.ytdl
