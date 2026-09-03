@@ -106,11 +106,6 @@ def analyze_url(req: AnalyzeRequest):
         "extract_flat": "in_playlist",
         "skip_download": True,
         "ignoreerrors": True,
-        "extractor_args": {
-            "youtube": {
-                "player_client": ["android", "ios", "web"]
-            }
-        },
         "quiet": True,
         "no_warnings": True,
     }
@@ -196,11 +191,6 @@ def run_download_thread(req: DownloadRequest):
         "ffmpeg_location": ffmpeg_path,
         "ignoreerrors": True,
         "windowsfilenames": True,
-        "extractor_args": {
-            "youtube": {
-                "player_client": ["android", "ios", "web"]
-            }
-        },
         "noplaylist": False,
     }
 
@@ -217,7 +207,7 @@ def run_download_thread(req: DownloadRequest):
         ydl_opts["playlist_items"] = indices_str
 
     if req.mode == "audio_only":
-        ydl_opts["format"] = "bestaudio/best"
+        ydl_opts["format"] = "ba/bestaudio/best"
         ydl_opts["postprocessors"] = [{
             "key": "FFmpegExtractAudio",
             "preferredcodec": req.audio_format,
@@ -225,15 +215,15 @@ def run_download_thread(req: DownloadRequest):
         }]
     elif req.mode == "video_only":
         if req.quality == "best":
-            ydl_opts["format"] = "bestvideo/best"
+            ydl_opts["format"] = "bv*/bestvideo/best"
         else:
-            ydl_opts["format"] = f"bestvideo[height<={req.quality}]/best[height<={req.quality}]/best"
+            ydl_opts["format"] = f"bv*[height<={req.quality}]/bestvideo[height<={req.quality}]/best"
         ydl_opts["merge_output_format"] = req.video_format
     else:  # video_audio
         if req.quality == "best":
-            ydl_opts["format"] = "bestvideo+bestaudio/best"
+            ydl_opts["format"] = "bv*+ba/b"
         else:
-            ydl_opts["format"] = f"bestvideo[height<={req.quality}]+bestaudio/best[height<={req.quality}]/best"
+            ydl_opts["format"] = f"bv*[height<={req.quality}]+ba/b[height<={req.quality}]/best[height<={req.quality}]/best"
         ydl_opts["merge_output_format"] = req.video_format
 
     def progress_hook(d):
