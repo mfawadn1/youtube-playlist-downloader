@@ -396,17 +396,33 @@ os.makedirs(static_dir, exist_ok=True)
 app.mount("/", StaticFiles(directory=static_dir, html=True), name="static")
 
 
+import socket
+
+
+def get_local_ip():
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(("8.8.8.8", 80))
+        ip = s.getsockname()[0]
+        s.close()
+        return ip
+    except Exception:
+        return "127.0.0.1"
+
+
 def main():
     global loop
-    print("=" * 60)
-    print("  YouTube Playlist & Video Downloader - Web Dashboard")
-    print("  Server running at: http://127.0.0.1:8000")
-    print("=" * 60)
+    local_ip = get_local_ip()
+    print("=" * 65)
+    print("  🚀 StreamVault YouTube Downloader - Web Dashboard")
+    print(f"  💻 On this PC:    http://localhost:8000")
+    print(f"  📱 On your Phone: http://{local_ip}:8000  (Connect to same Wi-Fi)")
+    print("=" * 65)
 
     # Auto open browser
     threading.Timer(1.2, lambda: webbrowser.open("http://127.0.0.1:8000")).start()
 
-    config = uvicorn.Config(app, host="127.0.0.1", port=8000, log_level="info")
+    config = uvicorn.Config(app, host="0.0.0.0", port=8000, log_level="info")
     server = uvicorn.Server(config)
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
