@@ -1,2 +1,5 @@
 yt-dlp
 imageio-ffmpeg
+fastapi
+uvicorn
+websockets

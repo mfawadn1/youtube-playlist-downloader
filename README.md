@@ -1,24 +1,45 @@
-# YouTube Playlist Downloader
+# 🎬 StreamVault - YouTube & Playlist Downloader Web UI
 
-A simple Python script to download YouTube playlists with 720p maximum resolution and automatic audio merging using `yt-dlp` and `imageio-ffmpeg`.
+A modern, fast, and feature-packed local web application to download YouTube videos, playlists, and audio with customizable quality and live real-time progress.
 
-## Prerequisites
+---
 
-- Python 3.8+
-- Dependencies listed in `requirements.txt`
+## ✨ Features
 
-## Installation
+- **🎨 Modern Dark Glassmorphic UI**: High-tech aesthetic with responsive controls and dynamic animations.
+- **⚡ Multiple Quality Presets**: Download in 4K (2160p), 2K (1440p), 1080p FHD, 720p HD, 480p, 360p, or Best Available.
+- **🎵 Audio Extraction**: Convert videos or playlists to MP3, M4A, WAV, or FLAC with custom bitrates (320kbps, 256kbps, 192kbps, 128kbps).
+- **📋 Playlist Selector**: Inspect entire playlists and cherry-pick specific videos with individual checkboxes or "Select All".
+- **📊 Real-time WebSocket Progress**: Live download speed (MB/s), percentage %, ETA countdown, and file sizes.
+- **📁 Custom Output Directory**: Choose your save location (defaults to `D:\yt downlaods`) with one-click "Open Folder" in Windows Explorer.
+- **🚀 Zero Cloud Timeouts**: Runs on your local connection using `yt-dlp` and `imageio-ffmpeg`.
 
-```bash
-pip install -r requirements.txt
-```
+---
 
-## Usage
+## 🛠️ Installation & Setup
 
-Run the script:
+1. **Install Dependencies** (if not already installed):
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-```bash
-python ty-playlistdownlad.py
-```
+2. **Run the Application**:
+   - Double-click `run_ui.bat`  
+   **OR**
+   - Run via terminal:
+     ```bash
+     python app.py
+     ```
 
-Enter the YouTube playlist URL when prompted.
+3. The web dashboard will automatically open in your browser at:
+   ```
+   http://127.0.0.1:8000
+   ```
+
+---
+
+## 📋 Technology Stack
+
+- **Backend**: FastAPI, Uvicorn, WebSockets, Python 3.12
+- **Downloader Core**: `yt-dlp` & `imageio-ffmpeg`
+- **Frontend**: HTML5, Vanilla CSS3 (Glassmorphism & CSS Grid/Flexbox), Vanilla JavaScript (WebSockets & REST API)
