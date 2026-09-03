@@ -239,45 +239,46 @@ function renderMediaPreview(data) {
 }
 
 function renderOptions(data) {
-  // Render resolution pills
+  // Always render all quality presets so user can pick any desired quality
   qualityPillsContainer.innerHTML = "";
-  let resolutions = ["2160", "1440", "1080", "720", "480", "360", "best"];
+  const resolutions = [
+    { id: "2160", label: "4K (2160p)" },
+    { id: "1440", label: "2K (1440p)" },
+    { id: "1080", label: "1080p FHD" },
+    { id: "720", label: "720p HD" },
+    { id: "480", label: "480p" },
+    { id: "360", label: "360p" },
+    { id: "best", label: "Best Available" }
+  ];
 
-  if (!data.is_playlist && data.available_resolutions && data.available_resolutions.length > 0) {
-    const set = new Set(data.available_resolutions.map(String));
-    resolutions = ["2160", "1440", "1080", "720", "480", "360"].filter(r => set.has(r));
-    resolutions.push("best");
-  }
-
-  resolutions.forEach((res, index) => {
+  resolutions.forEach((item) => {
     const btn = document.createElement("button");
     btn.type = "button";
     btn.className = "pill-btn";
-    btn.dataset.quality = res;
+    btn.dataset.quality = item.id;
+    btn.textContent = item.label;
 
-    let label = `${res}p`;
-    if (res === "2160") label = "4K (2160p)";
-    if (res === "1440") label = "2K (1440p)";
-    if (res === "1080") label = "1080p FHD";
-    if (res === "720") label = "720p HD";
-    if (res === "best") label = "Best Available";
-
-    btn.textContent = label;
-
-    // Default to 1080 or 720 or first available
-    if (res === "1080" || (index === 0 && !resolutions.includes("1080"))) {
+    if (item.id === selectedQuality) {
       btn.classList.add("active");
-      selectedQuality = res;
     }
 
     btn.addEventListener("click", () => {
       document.querySelectorAll("#qualityPills .pill-btn").forEach(b => b.classList.remove("active"));
       btn.classList.add("active");
-      selectedQuality = res;
+      selectedQuality = item.id;
     });
 
     qualityPillsContainer.appendChild(btn);
   });
+
+  // Ensure an active button is always selected
+  if (!document.querySelector("#qualityPills .pill-btn.active")) {
+    const defaultBtn = document.querySelector('#qualityPills .pill-btn[data-quality="1080"]') || document.querySelector("#qualityPills .pill-btn");
+    if (defaultBtn) {
+      defaultBtn.classList.add("active");
+      selectedQuality = defaultBtn.dataset.quality;
+    }
+  }
 
   // Handle Playlist view
   if (data.is_playlist) {
