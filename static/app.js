@@ -380,6 +380,89 @@ audioBitratePills.forEach(btn => {
   });
 });
 
+// Folder Selection & Presets
+const browseFolderBtn = document.getElementById("browseFolderBtn");
+const quickFolderChips = document.getElementById("quickFolderChips");
+
+// Load saved directory from localStorage if available
+const savedOutputDir = localStorage.getItem("streamvault_output_dir");
+if (savedOutputDir) {
+  outputDirInput.value = savedOutputDir;
+}
+
+outputDirInput.addEventListener("input", () => {
+  localStorage.setItem("streamvault_output_dir", outputDirInput.value.trim());
+  highlightActiveChip(outputDirInput.value.trim());
+});
+
+// Browse Folder Dialog
+browseFolderBtn.addEventListener("click", async () => {
+  browseFolderBtn.disabled = true;
+  browseFolderBtn.querySelector("span").textContent = "Selecting...";
+
+  try {
+    const res = await fetch("/api/browse-folder", { method: "POST" });
+    const data = await res.json();
+    if (res.ok && data.status === "ok" && data.path) {
+      outputDirInput.value = data.path;
+      localStorage.setItem("streamvault_output_dir", data.path);
+      highlightActiveChip(data.path);
+    }
+  } catch (err) {
+    console.error("Failed to open folder picker:", err);
+  } finally {
+    browseFolderBtn.disabled = false;
+    browseFolderBtn.querySelector("span").textContent = "Browse...";
+  }
+});
+
+// Load Quick Folders
+async function loadQuickFolders() {
+  try {
+    const res = await fetch("/api/quick-folders");
+    if (!res.ok) return;
+    const data = await res.json();
+    quickFolderChips.innerHTML = "";
+
+    data.folders.forEach((item) => {
+      const chip = document.createElement("button");
+      chip.type = "button";
+      chip.className = "quick-chip";
+      chip.innerHTML = `
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+        </svg>
+        <span>${item.name}</span>
+      `;
+      chip.dataset.path = item.path;
+
+      chip.addEventListener("click", () => {
+        outputDirInput.value = item.path;
+        localStorage.setItem("streamvault_output_dir", item.path);
+        highlightActiveChip(item.path);
+      });
+
+      quickFolderChips.appendChild(chip);
+    });
+
+    highlightActiveChip(outputDirInput.value.trim());
+  } catch (err) {
+    console.error("Failed to load quick folders:", err);
+  }
+}
+
+function highlightActiveChip(currentPath) {
+  const normCurrent = currentPath.replace(/\\/g, "/").toLowerCase();
+  document.querySelectorAll(".quick-chip").forEach((chip) => {
+    const chipNorm = (chip.dataset.path || "").replace(/\\/g, "/").toLowerCase();
+    if (chipNorm === normCurrent) {
+      chip.classList.add("active");
+    } else {
+      chip.classList.remove("active");
+    }
+  });
+}
+
 // Open folder action
 async function openOutputDir(path) {
   try {
@@ -400,6 +483,9 @@ openFolderBtn.addEventListener("click", () => {
 openCompleteFolderBtn.addEventListener("click", () => {
   openOutputDir(outputDirInput.value);
 });
+
+// Load quick folders on page start
+loadQuickFolders();
 
 // Start Download
 startDownloadBtn.addEventListener("click", async () => {

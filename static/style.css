@@ -446,10 +446,34 @@ button {
   gap: 16px;
 }
 
+.setting-header-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 8px;
+}
+.sub-hint {
+  font-size: 11px;
+  color: var(--text-sub);
+}
+
+.btn-sm {
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+}
+.btn-sm svg {
+  width: 15px;
+  height: 15px;
+}
+
 /* Output Directory */
 .output-dir-wrapper {
   display: flex;
   gap: 10px;
+  align-items: center;
 }
 .output-dir-wrapper input {
   flex: 1;
@@ -460,9 +484,62 @@ button {
   color: var(--text-main);
   font-size: 13px;
   outline: none;
+  font-family: inherit;
+  transition: border-color 0.2s;
 }
 .output-dir-wrapper input:focus {
   border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+}
+
+/* Quick Folders */
+.quick-folders-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+.quick-folder-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--text-sub);
+  letter-spacing: 0.5px;
+}
+.quick-folder-chips {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.quick-chip {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-pill);
+  padding: 4px 10px;
+  font-size: 11px;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.2s ease;
+}
+.quick-chip svg {
+  width: 12px;
+  height: 12px;
+  color: var(--secondary);
+}
+.quick-chip:hover {
+  background: rgba(99, 102, 241, 0.15);
+  border-color: var(--primary);
+  color: #fff;
+  transform: translateY(-1px);
+}
+.quick-chip.active {
+  background: rgba(99, 102, 241, 0.25);
+  border-color: var(--primary);
+  color: #fff;
 }
 
 /* Playlist Table */

@@ -163,15 +163,34 @@
 
         <!-- Output Directory -->
         <div class="setting-group">
-          <label class="setting-label">Save Destination</label>
+          <div class="setting-header-flex">
+            <label class="setting-label">Save Destination</label>
+            <span class="sub-hint">Choose where your downloaded files are stored</span>
+          </div>
           <div class="output-dir-wrapper">
-            <input type="text" id="outputDirInput" value="D:\yt downlaods" spellcheck="false">
-            <button type="button" class="btn-secondary" id="openFolderBtn" title="Open folder in File Explorer">
+            <input type="text" id="outputDirInput" value="D:\yt downlaods" spellcheck="false" placeholder="Select or type output folder path...">
+            <button type="button" class="btn-primary btn-sm" id="browseFolderBtn" title="Browse folder from computer">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                <circle cx="12" cy="13" r="2"></circle>
               </svg>
-              <span>Open Folder</span>
+              <span>Browse...</span>
             </button>
+            <button type="button" class="btn-secondary btn-sm" id="openFolderBtn" title="Open folder in File Explorer">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                <polyline points="15 3 21 3 21 9"></polyline>
+                <line x1="10" y1="14" x2="21" y2="3"></line>
+              </svg>
+              <span>Open</span>
+            </button>
+          </div>
+          <!-- Quick Destination Presets -->
+          <div class="quick-folders-container" id="quickFolders">
+            <span class="quick-folder-label">Quick Locations:</span>
+            <div class="quick-folder-chips" id="quickFolderChips">
+              <!-- Injected via JS -->
+            </div>
           </div>
         </div>
 

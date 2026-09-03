@@ -335,6 +335,40 @@ def cancel_download():
     return {"status": "cancelling", "message": "Cancellation requested."}
 
 
+@app.post("/api/browse-folder")
+def browse_folder():
+    def _pick():
+        import tkinter as tk
+        from tkinter import filedialog
+        root = tk.Tk()
+        root.withdraw()
+        root.attributes("-topmost", True)
+        selected = filedialog.askdirectory(title="Select Download Destination Folder")
+        root.destroy()
+        return selected
+
+    try:
+        folder = _pick()
+        if folder:
+            folder = os.path.normpath(folder)
+            return {"status": "ok", "path": folder}
+        return {"status": "cancelled", "path": None}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Could not open folder picker: {str(e)}")
+
+
+@app.get("/api/quick-folders")
+def get_quick_folders():
+    user_home = os.path.expanduser("~")
+    folders = [
+        {"name": "D:\\yt downlaods", "path": r"D:\yt downlaods"},
+        {"name": "Downloads", "path": os.path.normpath(os.path.join(user_home, "Downloads"))},
+        {"name": "Videos", "path": os.path.normpath(os.path.join(user_home, "Videos"))},
+        {"name": "Desktop", "path": os.path.normpath(os.path.join(user_home, "Desktop"))},
+    ]
+    return {"folders": folders}
+
+
 @app.post("/api/open-folder")
 def open_folder(req: OpenFolderRequest):
     folder_path = os.path.abspath(req.path.strip())
